@@ -2,15 +2,20 @@ const WALLPAPER_STORAGE_KEY = "wallboard.wallpapers.v1";
 const FILTER_STORAGE_KEY = "wallboard.filter.v1";
 const THEME_STORAGE_KEY = "wallboard.theme.v1";
 
-const FALLBACK_IMAGE =
-  "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80";
+const FALLBACK_IMAGE = "images/fallback.jpg";
+
+const LEGACY_IMAGE_MAP = {
+  "photo-1464822759023-fed622ff2c3b": "images/mountain-drift.jpg",
+  "photo-1492144534655-ae79c964c9d7": "images/neon-wheel.jpg",
+  "photo-1552053831-71594a27632d": "images/golden-retriever-mood.jpg",
+  "photo-1534447677768-be436bb09401": "images/fallback.jpg"
+};
 
 const DEFAULT_WALLPAPERS = [
   {
     id: "seed-1",
     title: "Mountain Drift",
-    imageUrl:
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "images/mountain-drift.jpg",
     category: "nature",
     liked: false,
     createdAt: Date.now() - 5000
@@ -18,8 +23,7 @@ const DEFAULT_WALLPAPERS = [
   {
     id: "seed-2",
     title: "Neon Wheel",
-    imageUrl:
-      "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "images/neon-wheel.jpg",
     category: "cars",
     liked: true,
     createdAt: Date.now() - 4000
@@ -27,8 +31,7 @@ const DEFAULT_WALLPAPERS = [
   {
     id: "seed-3",
     title: "Golden Retriever Mood",
-    imageUrl:
-      "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "images/golden-retriever-mood.jpg",
     category: "animals",
     liked: false,
     createdAt: Date.now() - 3000
@@ -45,7 +48,7 @@ function wallpaperApp() {
     form: {
       title: "",
       imageUrl: "",
-      category: "nature"
+      category: "cars"
     },
     errorMessage: "",
 
@@ -57,6 +60,10 @@ function wallpaperApp() {
         const searchMatch = wallpaper.title.toLowerCase().includes(query);
         return categoryMatch && searchMatch;
       });
+    },
+
+    get likedWallpapers() {
+      return this.wallpapers.filter((wallpaper) => wallpaper.liked);
     },
 
     init() {
@@ -91,11 +98,25 @@ function wallpaperApp() {
           return [...DEFAULT_WALLPAPERS];
         }
 
-        return parsed.filter((item) => this.isValidWallpaper(item));
+        return parsed
+          .filter((item) => this.isValidWallpaper(item))
+          .map((item) => ({
+            ...item,
+            imageUrl: this.mapLegacyImageUrl(item.imageUrl)
+          }));
       } catch (error) {
         console.warn("Could not parse local wallpapers", error);
         return [...DEFAULT_WALLPAPERS];
       }
+    },
+
+    mapLegacyImageUrl(imageUrl) {
+      for (const [legacyToken, localPath] of Object.entries(LEGACY_IMAGE_MAP)) {
+        if (typeof imageUrl === "string" && imageUrl.includes(legacyToken)) {
+          return localPath;
+        }
+      }
+      return imageUrl;
     },
 
     isValidWallpaper(item) {
@@ -197,7 +218,7 @@ function wallpaperApp() {
     resetForm() {
       this.form.title = "";
       this.form.imageUrl = "";
-      this.form.category = "nature";
+      this.form.category = "cars";
     },
 
     isValidHttpUrl(value) {

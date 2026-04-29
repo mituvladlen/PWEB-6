@@ -69,6 +69,7 @@
                 <option :value="category" x-text="labelFor(category)"></option>
               </template>
             </select>
+            <p class="category-hint"><strong>Selected:</strong> <span x-text="labelFor(form.category)"></span></p>
 
             <button type="submit" class="primary-btn">Add Wallpaper</button>
             <p class="error" x-show="errorMessage" x-text="errorMessage" aria-live="polite"></p>
@@ -149,6 +150,49 @@
           <div class="empty" x-show="filteredWallpapers.length === 0">
             <h3>No wallpapers match your filters.</h3>
             <p>Try a different category or add a new wallpaper.</p>
+          </div>
+        </section>
+
+        <section class="panel liked-panel" aria-labelledby="liked-heading" x-show="likedWallpapers.length > 0">
+          <div class="panel-header">
+            <h2 id="liked-heading">❤️ Liked Wallpapers</h2>
+            <p><strong x-text="likedWallpapers.length"></strong> liked</p>
+          </div>
+
+          <div class="gallery" x-show="likedWallpapers.length > 0">
+            <template x-for="wallpaper in likedWallpapers" :key="wallpaper.id">
+              <article class="card" tabindex="0">
+                <img
+                  :src="wallpaper.imageUrl"
+                  :alt="'Wallpaper: ' + wallpaper.title"
+                  loading="lazy"
+                  @error="setFallbackImage($event)"
+                />
+                <div class="card-body">
+                  <div class="meta">
+                    <h3 x-text="wallpaper.title"></h3>
+                    <span class="badge" x-text="labelFor(wallpaper.category)"></span>
+                  </div>
+                  <div class="actions">
+                    <button
+                      class="like-btn"
+                      :class="{ 'liked': wallpaper.liked }"
+                      @click="toggleLike(wallpaper.id)"
+                      :aria-label="wallpaper.liked ? 'Unlike ' + wallpaper.title : 'Like ' + wallpaper.title"
+                    >
+                      <span x-text="wallpaper.liked ? 'Liked' : 'Like'"></span>
+                    </button>
+                    <button
+                      class="danger-btn"
+                      @click="removeWallpaper(wallpaper.id)"
+                      :aria-label="'Remove ' + wallpaper.title"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </article>
+            </template>
           </div>
         </section>
       </main>

@@ -156,8 +156,17 @@ function wallpaperApp() {
     },
 
     toggleTheme() {
-      this.theme = this.theme === "light" ? "dark" : "light";
-      localStorage.setItem(THEME_STORAGE_KEY, this.theme);
+      const nextTheme = this.theme === "dark" ? "light" : "dark";
+      this.setTheme(nextTheme);
+    },
+
+    setTheme(theme) {
+      if (theme !== "light" && theme !== "dark") {
+        return;
+      }
+
+      this.theme = theme;
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
       this.applyTheme();
     },
 

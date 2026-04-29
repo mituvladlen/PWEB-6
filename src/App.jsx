@@ -214,7 +214,8 @@ export default function App() {
   }
 
   return (
-    <div className="background-glow" aria-hidden="true">
+    <>
+      <div className="background-glow" aria-hidden="true"></div>
       <div className="page-shell">
         <header className="topbar">
           <div>
@@ -427,6 +428,6 @@ export default function App() {
           )}
         </main>
       </div>
-    </div>
+    </>
   )
 }

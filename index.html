@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" x-data="wallpaperApp()" x-init="init()" :data-theme="theme">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wallboard - Wallpaper Collection</title>
+    <meta
+      name="description"
+      content="A client-side wallpaper board where you can add, like, remove, and filter wallpapers."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <div class="background-glow" aria-hidden="true"></div>
+    <div class="page-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Lab 6 Front-end</p>
+          <h1>Wallboard</h1>
+          <p class="subtitle">Collect and organize wallpapers by vibe.</p>
+        </div>
+        <button class="theme-btn" @click="toggleTheme" :aria-label="theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'">
+          <span x-text="theme === 'light' ? 'Dark Mode' : 'Light Mode'"></span>
+        </button>
+      </header>
+
+      <main class="layout">
+        <section class="panel form-panel" aria-labelledby="add-wallpaper-heading">
+          <h2 id="add-wallpaper-heading">Add Wallpaper</h2>
+          <form class="add-form" @submit.prevent="addWallpaper">
+            <label for="title">Title</label>
+            <input id="title" type="text" x-model.trim="form.title" placeholder="Sunset Drive" required />
+
+            <label for="imageUrl">Image URL</label>
+            <input id="imageUrl" type="url" x-model.trim="form.imageUrl" placeholder="https://example.com/photo.jpg" required />
+
+            <label for="category">Category</label>
+            <select id="category" x-model="form.category">
+              <template x-for="category in categories" :key="category">
+                <option :value="category" x-text="labelFor(category)"></option>
+              </template>
+            </select>
+
+            <button type="submit" class="primary-btn">Add Wallpaper</button>
+            <p class="error" x-show="errorMessage" x-text="errorMessage" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="panel board-panel" aria-labelledby="board-heading">
+          <div class="panel-header">
+            <h2 id="board-heading">Wallpaper Board</h2>
+            <p><strong x-text="wallpapers.length"></strong> total</p>
+          </div>
+
+          <div class="filters" role="toolbar" aria-label="Wallpaper filters">
+            <button
+              class="chip"
+              :class="{ 'active': filterCategory === 'all' }"
+              @click="setFilter('all')"
+            >
+              All
+            </button>
+            <template x-for="category in categories" :key="category + '-filter'">
+              <button
+                class="chip"
+                :class="{ 'active': filterCategory === category }"
+                @click="setFilter(category)"
+                x-text="labelFor(category)"
+              ></button>
+            </template>
+          </div>
+
+          <label class="sr-only" for="search">Search wallpapers by title</label>
+          <input
+            id="search"
+            class="search-input"
+            type="search"
+            x-model.trim="searchTerm"
+            placeholder="Search by title"
+          />
+
+          <p class="small-note" x-text="filteredWallpapers.length + ' items visible'"></p>
+
+          <div class="gallery" x-show="filteredWallpapers.length > 0">
+            <template x-for="wallpaper in filteredWallpapers" :key="wallpaper.id">
+              <article class="card" tabindex="0">
+                <img
+                  :src="wallpaper.imageUrl"
+                  :alt="'Wallpaper: ' + wallpaper.title"
+                  loading="lazy"
+                  @error="setFallbackImage($event)"
+                />
+                <div class="card-body">
+                  <div class="meta">
+                    <h3 x-text="wallpaper.title"></h3>
+                    <span class="badge" x-text="labelFor(wallpaper.category)"></span>
+                  </div>
+                  <div class="actions">
+                    <button
+                      class="like-btn"
+                      :class="{ 'liked': wallpaper.liked }"
+                      @click="toggleLike(wallpaper.id)"
+                      :aria-label="wallpaper.liked ? 'Unlike ' + wallpaper.title : 'Like ' + wallpaper.title"
+                    >
+                      <span x-text="wallpaper.liked ? 'Liked' : 'Like'"></span>
+                    </button>
+                    <button
+                      class="danger-btn"
+                      @click="removeWallpaper(wallpaper.id)"
+                      :aria-label="'Remove ' + wallpaper.title"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </article>
+            </template>
+          </div>
+
+          <div class="empty" x-show="filteredWallpapers.length === 0">
+            <h3>No wallpapers match your filters.</h3>
+            <p>Try a different category or add a new wallpaper.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

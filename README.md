@@ -6,7 +6,7 @@ Client-side web app for managing wallpapers in a Pinterest-style board.
 Wallpaper organizer where users can add wallpapers by URL, like/unlike items, remove items, and filter by category.
 
 ## Library Used
-- Alpine.js (frontend library, loaded via CDN)
+- React 18 with Vite (modern frontend framework and build tool)
 
 ## Entity
 Wallpaper entity fields:
@@ -72,9 +72,12 @@ Persisted browser state:
 - Images include descriptive alt text
 
 ## Project Structure
-- index.html: App markup
+- index.html: React app entry point
+- vite.config.js: Vite build configuration
+- package.json: Dependencies and scripts
+- src/App.jsx: Main React component with all app logic
+- src/main.jsx: React DOM render entry
 - styles.css: Custom theme and responsive styling
-- app.js: Alpine.js logic and localStorage persistence
 - images/: Pre-downloaded seed image assets (default wallpapers)
 
 ## About "Local Images"
@@ -111,15 +114,26 @@ Public link:
 - Final README, deployment, screenshots, release-ready cleanup
 
 ## How to Run Locally
-Because this is a static app, you can run it with any local static server.
+Because this is a React app built with Vite, you need to install dependencies and run the dev server.
 
-Option A (VS Code Live Server extension):
-- Open index.html with Live Server
+1. Install dependencies:
+```bash
+npm install
+```
 
-Option B (Node, recommended on this setup):
-- Run: npx --yes serve . -l 5500
-- Open: http://localhost:5500
+2. Start development server:
+```bash
+npm run dev
+```
 
-Option C (Python):
-- Run: python -m http.server 5500
-- Open: http://localhost:5500
+3. Open http://localhost:5173 in your browser
+
+To build for production:
+```bash
+npm run build
+```
+
+To preview production build:
+```bash
+npm run preview
+```

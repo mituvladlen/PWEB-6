@@ -75,6 +75,12 @@ Persisted browser state:
 - index.html: App markup
 - styles.css: Custom theme and responsive styling
 - app.js: Alpine.js logic and localStorage persistence
+- images/: Pre-downloaded seed image assets (default wallpapers)
+
+## About "Local Images"
+The app uses localStorage to save all wallpaper metadata (title, URL, category, likes) in the browser.
+- **Seed images**: The 4 default wallpapers are stored as local files in the images/ folder for fast loading.
+- **User-added images**: When you add a new wallpaper via URL, the metadata is saved in localStorage, but the image itself stays at the original URL (not downloaded to your disk). This is by design—a static web app can't write to your file system.
 
 ## Public Hosting
 Deploy on GitHub Pages (static hosting):

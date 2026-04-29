@@ -176,7 +176,10 @@ h1 {
   padding: 1rem;
   align-self: start;
 }
-
+.board-panel,
+.liked-panel {
+  grid-column: 2;
+}
 .add-form {
   display: grid;
   gap: 0.65rem;
@@ -197,6 +200,12 @@ select {
   border-radius: 12px;
   padding: 0.68rem 0.78rem;
   font: inherit;
+}
+
+.category-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  color: var(--primary-strong);
 }
 
 input:focus,
@@ -231,6 +240,13 @@ button:focus-visible,
 
 .board-panel {
   padding: 1rem;
+}
+
+.liked-panel {
+  padding: 1rem;
+  margin-top: 1rem;
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-alt));
 }
 
 .panel-header {

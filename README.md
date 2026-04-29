@@ -110,6 +110,10 @@ Because this is a static app, you can run it with any local static server.
 Option A (VS Code Live Server extension):
 - Open index.html with Live Server
 
-Option B (Python):
+Option B (Node, recommended on this setup):
+- Run: npx --yes serve . -l 5500
+- Open: http://localhost:5500
+
+Option C (Python):
 - Run: python -m http.server 5500
 - Open: http://localhost:5500

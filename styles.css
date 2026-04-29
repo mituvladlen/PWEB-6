@@ -104,10 +104,20 @@ h1 {
 }
 
 .theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   background: var(--bg-alt);
   color: var(--text);
   border-color: var(--border);
   padding: 0.65rem 1rem;
+}
+
+.theme-icon {
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--primary-strong);
 }
 
 .layout {

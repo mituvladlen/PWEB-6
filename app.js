@@ -62,8 +62,21 @@ function wallpaperApp() {
     init() {
       this.wallpapers = this.loadWallpapers();
       this.filterCategory = localStorage.getItem(FILTER_STORAGE_KEY) || "all";
-      this.theme = localStorage.getItem(THEME_STORAGE_KEY) || "light";
+      this.theme = this.getInitialTheme();
       this.applyTheme();
+    },
+
+    getInitialTheme() {
+      const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+      if (storedTheme === "light" || storedTheme === "dark") {
+        return storedTheme;
+      }
+
+      const prefersDark =
+        typeof window !== "undefined" &&
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+      return prefersDark ? "dark" : "light";
     },
 
     loadWallpapers() {

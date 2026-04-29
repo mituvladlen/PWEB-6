@@ -8,6 +8,16 @@
       name="description"
       content="A client-side wallpaper board where you can add, like, remove, and filter wallpapers."
     />
+    <script>
+      (function () {
+        const key = "wallboard.theme.v1";
+        const stored = localStorage.getItem(key);
+        const prefersDark =
+          window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = stored || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -27,7 +37,14 @@
           <h1>Wallboard</h1>
           <p class="subtitle">Collect and organize wallpapers by vibe.</p>
         </div>
-        <button class="theme-btn" @click="toggleTheme" :aria-label="theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'">
+        <button
+          class="theme-btn"
+          @click="toggleTheme"
+          :aria-label="theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'"
+          :aria-pressed="theme === 'dark'"
+          type="button"
+        >
+          <span class="theme-icon" aria-hidden="true" x-text="theme === 'light' ? 'Moon' : 'Sun'"></span>
           <span x-text="theme === 'light' ? 'Dark Mode' : 'Light Mode'"></span>
         </button>
       </header>

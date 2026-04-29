@@ -44,8 +44,12 @@
           :aria-pressed="theme === 'dark'"
           type="button"
         >
-          <span class="theme-icon" aria-hidden="true" x-text="theme === 'light' ? 'Moon' : 'Sun'"></span>
-          <span x-text="theme === 'light' ? 'Dark Mode' : 'Light Mode'"></span>
+          <span class="theme-label">Theme</span>
+          <span class="theme-switch" aria-hidden="true">
+            <span class="theme-switch-text light">Light</span>
+            <span class="theme-switch-text dark">Dark</span>
+            <span class="theme-switch-knob"></span>
+          </span>
         </button>
       </header>
 
